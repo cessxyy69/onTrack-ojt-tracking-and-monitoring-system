@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEUST-OJT Tracker</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <style>
+    /* LANDING PAGE STYLES */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .landing-page-body {
+      background-color: #ffffff;
+      color: #333;
+      padding: 0;
+      margin: 0;
+    }
+
+    header.navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo img {
+      width: 150px;
+      height: 50px;
+      object-fit: fill;
+    }
+
+    .title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #547792;
+    }
+
+    main.landing {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    main.landing h1 {
+      font-size: 2em;
+      color: #547792;
+      margin-bottom: 10px;
+    }
+
+    main.landing p {
+      font-size: 1em;
+      color: #555;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .feature-box {
+      background-color: #f7f9fc;
+      padding: 16px;
+      margin-top: 16px;
+      border-radius: 12px;
+      text-align: left;
+    }
+
+    .feature-box h3 {
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .feature-box h3 i {
+      color: #547792;
+      margin-right: 8px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button.get-started,
+    button.create-account {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button.get-started {
+      background-color: #f4f4f4;
+      color: black;
+    }
+
+    button.create-account {
+      background-color: #547792;
+      color: white;
+    }
+
+    button.get-started:hover {
+      background-color: #446280;
+    }
+
+    button.create-account:hover {
+      background-color: #446280;
+    }
+  </style>
+
+  <body class="landing-page-body">
+    <header class="navbar">
+      <div class="logo">
+        <img src="ontrack-logo.png" alt="NEUST Logo" />
+      </div>
+    </header>
+
+    <main class="landing">
+      <h1>OnTrack: OJT Tracking and Monitoring System</h1>
+      <p>
+        A comprehensive system for NEUST-Sumacab Campus students to efficiently
+        track and monitor their On-the-Job Training activities.
+      </p>
+
+      <div class="features">
+        <div class="feature-box">
+          <h3><i class="fas fa-clipboard"></i>Daily Activity Logging</h3>
+          <p>Track time in/out and tasks accomplished</p>
+        </div>
+        <div class="feature-box">
+          <h3><i class="fas fa-chart-line"></i>Progress Monitoring</h3>
+          <p>Visualize progress with intuitive dashboards</p>
+        </div>
+        <div class="feature-box">
+          <h3><i class="fas fa-file-alt"></i>PDF Reports</h3>
+          <p>Generate reports for submission</p>
+        </div>
+        <div class="feature-box">
+          <h3><i class="fas fa-tasks"></i>Task Management</h3>
+          <p>Create tasks with deadline reminders</p>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="get-started" onclick="goToLogin()">Get Started</button>
+        <button class="create-account" onclick="goToRegister()">
+          Create Account
+        </button>
+      </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBA4IwkROlhrz2ts19gLD48Cio_D0qiqbw",
+        authDomain: "ontrack-585a4.firebaseapp.com",
+        projectId: "ontrack-585a4",
+        storageBucket: "ontrack-585a4.firebasestorage.app",
+        messagingSenderId: "799924979752",
+        appId: "1:799924979752:web:8a9579035dc75ea16dcd1d",
+        measurementId: "G-TBF0Y7BNDK",
+      };
+
+      // Initialize Firebase
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+
+      // Check auth state when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        firebase.auth().onAuthStateChanged(function (user) {
+          if (user) {
+            // If user is still signed in, sign them out
+            firebase
+              .auth()
+              .signOut()
+              .then(() => {
+                // Clear any stored data
+                localStorage.clear();
+                sessionStorage.clear();
+              })
+              .catch((error) => {
+                console.error("Error signing out:", error);
+              });
+          }
+        });
+      });
+
+      // Modify your existing navigation functions
+      function goToLogin() {
+        // Ensure user is signed out before redirecting
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            window.location.href = "login.html";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            window.location.href = "login.html";
+          });
+      }
+
+      function goToRegister() {
+        // Ensure user is signed out before redirecting
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            window.location.href = "register.html";
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            window.location.href = "register.html";
+          });
+      }
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'93a5fede0d7ab050',t:'MTc0NjM0MDcxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
